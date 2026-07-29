@@ -51,9 +51,8 @@ pipeline {
                     echo '========== Pushing Docker Image =========='
                     withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh '''
-                            docker tag ${DOCKER_IMAGE}:${BUILD_NUMBER} ${DOCKER_USER}/${DOCKER_IMAGE}:latest
+                            docker tag ${DOCKER_IMAGE}:${BUILD_NUMBER} ${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}
                             echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin ${DOCKER_REGISTRY}
-                            docker push ${DOCKER_USER}/${DOCKER_IMAGE}:latest
                             docker push ${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}
                             docker logout ${DOCKER_REGISTRY}
                         '''
