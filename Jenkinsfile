@@ -7,7 +7,6 @@ pipeline {
         DOCKER_CREDENTIALS = 'docker-credentials'
         ARGOCD_SERVER = 'http://23.20.3.55:8085/'
         ARGOCD_CREDENTIALS = 'argocd-credentials'
-        GIT_REPO = 'your-git-repo-url'
         GIT_CREDENTIALS = 'git-credentials'
     }
     
@@ -41,7 +40,6 @@ pipeline {
                     echo '========== Building Docker Image =========='
                     sh '''
                         docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .
-                        docker tag ${DOCKER_IMAGE}:${BUILD_NUMBER} ${DOCKER_IMAGE}:latest
                     '''
                 }
             }
@@ -53,9 +51,9 @@ pipeline {
                     echo '========== Pushing Docker Image =========='
                     withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh '''
+                            docker tag ${DOCKER_IMAGE}:${BUILD_NUMBER} ${DOCKER_USER}/${DOCKER_IMAGE}:latest
                             echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin ${DOCKER_REGISTRY}
-                            docker push ${DOCKER_IMAGE}:${BUILD_NUMBER}
-                            docker push ${DOCKER_IMAGE}:latest
+                            docker push ${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}
                             docker logout ${DOCKER_REGISTRY}
                         '''
                     }
@@ -63,28 +61,6 @@ pipeline {
             }
         }
         
-        stage('Update ArgoCD') {
-            steps {
-                script {
-                    echo '========== Updating ArgoCD Configuration =========='
-                    withCredentials([usernamePassword(credentialsId: "${ARGOCD_CREDENTIALS}", usernameVariable: 'ARGOCD_USER', passwordVariable: 'ARGOCD_PASS')]) {
-                        sh '''
-                            # Login to ArgoCD
-                            argocd login ${ARGOCD_SERVER} --username ${ARGOCD_USER} --password ${ARGOCD_PASS} --insecure
-                            
-                            # Update application image
-                            argocd app set your-app-name -p image.tag=${BUILD_NUMBER}
-                            
-                            # Sync application
-                            argocd app sync your-app-name --wait
-                            
-                            # Logout
-                            argocd logout ${ARGOCD_SERVER}
-                        '''
-                    }
-                }
-            }
-        }
     }
     
     post {
