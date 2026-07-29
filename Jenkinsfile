@@ -60,6 +60,25 @@ pipeline {
                 }
             }
         }
+
+        stage('Update GitOps Repo') {
+            steps {
+                sh '''
+                git clone https://github.com/mahmoudSh58/gitops_nodjsapp_sandbox.git
+                cd gitops_nodjsapp_sandbox
+                git checkout main
+
+                sed -i "s/image:.*/image: \\"${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}\\"/" nodejs-app-sandbox/values.yaml
+
+                git config user.name "mahmoudSh58"
+                git config user.email "mahmoudsharif914@gmail.com"
+
+                git add .
+                git commit -m "Update image tag to ${BUILD_NUMBER}"
+                git push
+                '''
+            }
+        }
         
     }
     
