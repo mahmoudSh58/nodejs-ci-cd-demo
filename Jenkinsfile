@@ -7,6 +7,7 @@ pipeline {
         DOCKER_CREDENTIALS = 'docker-credentials'
         GIT_CREDENTIALS = 'github_cred'
         DOCKER_USER = 'mahmoud58'
+        N8N_WEBHOOK_URL = 'https://theadmin123.app.n8n.cloud/webhook-test/f76365dd-7d10-4563-9764-be44915ca92c'
     }
     
     stages {
@@ -93,6 +94,21 @@ pipeline {
                     
                     git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@github.com/mahmoudSh58/gitops_nodjsapp_sandbox.git
                     git push origin main
+                    sleep 60
+                    '''
+                }
+            }
+        }
+        
+        stage('Trigger n8n Workflow') {
+            steps {
+                script {
+                    echo '========== Triggering n8n Workflow =========='
+                    sh '''
+                        curl -X POST \
+                            -H "Content-Type: application/json" \
+                            -d '{"build_number":"'"${BUILD_NUMBER}"'"}' \
+                            "${N8N_WEBHOOK_URL}"
                     '''
                 }
             }
