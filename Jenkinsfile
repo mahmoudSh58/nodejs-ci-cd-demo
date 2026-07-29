@@ -68,7 +68,7 @@ pipeline {
                 cd gitops_nodjsapp_sandbox
                 git checkout main
 
-                sed -i "s/image:.*/image: \\"${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}\\"/" nodejs-app-sandbox/values.yaml
+                sed -i 's|image:.*|image: \\"${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}\\"|' nodejs-app-sandbox/values.yaml
 
                 git config user.name "mahmoudSh58"
                 git config user.email "mahmoudsharif914@gmail.com"
