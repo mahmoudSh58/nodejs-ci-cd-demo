@@ -19,7 +19,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Test') {
             steps {
                 script {
@@ -80,7 +80,7 @@ pipeline {
                 sed -i 's|image:.*|image: \\"${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}\\"|' nodejs-app-sandbox/values.yaml
 
                 git config user.name "mahmoudSh58"
-                git config user.email "mahmoudsharif914@gmail.com"
+                git config user.email "mahmoudsharif915@gmail.com"
 
                 git add .
                 git commit -m "Update image tag to ${BUILD_NUMBER}"
