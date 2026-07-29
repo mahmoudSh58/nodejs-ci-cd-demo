@@ -11,6 +11,15 @@ pipeline {
     }
     
     stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    echo '========== Checking Out Code =========='
+                    checkout scm
+                }
+            }
+        }
+        
         stage('Test') {
             steps {
                 script {
@@ -84,6 +93,7 @@ pipeline {
     
     post {
         always {
+            cleanWs()
             echo '========== Pipeline Execution Complete =========='
         }
         success {
