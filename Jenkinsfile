@@ -6,6 +6,7 @@ pipeline {
         DOCKER_IMAGE = 'nodejs-app'
         DOCKER_CREDENTIALS = 'docker-credentials'
         GIT_CREDENTIALS = 'github_cred'
+        DOCKER_USER = 'mahmoud58'
     }
     
     stages {
