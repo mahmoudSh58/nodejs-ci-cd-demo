@@ -5,9 +5,7 @@ pipeline {
         DOCKER_REGISTRY = 'docker.io'
         DOCKER_IMAGE = 'nodejs-app'
         DOCKER_CREDENTIALS = 'docker-credentials'
-        ARGOCD_SERVER = 'http://23.20.3.55:8085/'
-        ARGOCD_CREDENTIALS = 'argocd-credentials'
-        GIT_CREDENTIALS = 'git-credentials'
+        GIT_CREDENTIALS = 'github_cred'
     }
     
     stages {
@@ -72,20 +70,30 @@ pipeline {
 
         stage('Update GitOps Repo') {
             steps {
-                sh '''
-                git clone https://github.com/mahmoudSh58/gitops_nodjsapp_sandbox.git
-                cd gitops_nodjsapp_sandbox
-                git checkout main
+                withCredentials([usernamePassword(
+                    credentialsId: "${GIT_CREDENTIALS}",
+                    usernameVariable: 'GIT_USER',
+                    passwordVariable: 'GIT_TOKEN'
+                )]) {
+                    sh '''
+                    set -e
 
-                sed -i 's|image:.*|image: \\"${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}\\"|' nodejs-app-sandbox/values.yaml
+                    git clone https://github.com/${GIT_USER}/gitops_nodjsapp_sandbox.git
+                    cd gitops_nodjsapp_sandbox
+                    git checkout main
 
-                git config user.name "mahmoudSh58"
-                git config user.email "mahmoudsharif915@gmail.com"
+                    sed -i "s|image:.*|image: \"${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}\"|" nodejs-app-sandbox/values.yaml
 
-                git add .
-                git commit -m "Update image tag to ${BUILD_NUMBER}"
-                git push
-                '''
+                    git config user.name "${GIT_USER}"
+                    git config user.email "${GIT_USER}@users.noreply.github.com"
+
+                    git add .
+                    git commit -m "Update image tag to ${BUILD_NUMBER}"
+                    
+                    git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@github.com/mahmoudSh58/gitops_nodjsapp_sandbox.git
+                    git push origin main
+                    '''
+                }
             }
         }
         
