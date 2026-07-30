@@ -12,7 +12,7 @@ COPY tsconfig.json ./
 COPY .npmrc /root/.npmrc
 
 ENV NPM_CONFIG_USERCONFIG=/root/.npmrc
-ENV NPM_CONFIG_REGISTRY=http://34.228.226.222:8081/repository/npm-proxy/
+ENV NPM_CONFIG_REGISTRY=http://54.198.52.20:8081/repository/npm-proxy/
 ENV NPM_CONFIG_STRICT_SSL=false
 
 # Install all dependencies (including dev dependencies)
@@ -35,7 +35,7 @@ COPY package-lock.json ./
 COPY .npmrc /root/.npmrc
 
 ENV NPM_CONFIG_USERCONFIG=/root/.npmrc
-ENV NPM_CONFIG_REGISTRY=http://34.228.226.222:8081/repository/npm-proxy/
+ENV NPM_CONFIG_REGISTRY=http://54.198.52.20:8081/repository/npm-proxy/
 ENV NPM_CONFIG_STRICT_SSL=false
 
 # Install production dependencies only (skip prepare script)
