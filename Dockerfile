@@ -12,11 +12,11 @@ COPY tsconfig.json ./
 COPY .npmrc /root/.npmrc
 
 ENV NPM_CONFIG_USERCONFIG=/root/.npmrc
-ENV NPM_CONFIG_REGISTRY=http://54.198.52.20:8081/repository/npm-proxy/
+ENV NPM_CONFIG_REGISTRY='Nexus registry URL'
 ENV NPM_CONFIG_STRICT_SSL=false
 
 # Install all dependencies (including dev dependencies)
-RUN npm ci
+RUN npm install --ignore-scripts
 
 # Copy source code
 COPY src ./src
@@ -35,13 +35,11 @@ COPY package-lock.json ./
 COPY .npmrc /root/.npmrc
 
 ENV NPM_CONFIG_USERCONFIG=/root/.npmrc
-ENV NPM_CONFIG_REGISTRY=http://54.198.52.20:8081/repository/npm-proxy/
+ENV NPM_CONFIG_REGISTRY='Nexus registry URL'
 ENV NPM_CONFIG_STRICT_SSL=false
 
-# Install production dependencies only (skip prepare script)
-RUN npm ci --omit=dev --ignore-scripts
-
-# Copy built application from builder stage
+# Copy dependencies and built app from builder stage
+RUN npm install --only=production --ignore-scripts
 COPY --from=builder /app/dist ./dist
 
 # Create a non-root user to run the app
