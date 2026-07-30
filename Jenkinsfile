@@ -21,20 +21,20 @@ pipeline {
             }
         }
 
-        stage('Edit Nexus .npmrc and Dockerfile') {
-            steps {
-                script {
-                    echo '========== Editing .npmrc for Nexus =========='
-                    withCredentials([usernamePassword(credentialsId: "${NEXUS_CREDENTIALS}", usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
-                        sh '''
-                            set -e
-                            sed -i "s|^registry=.*|registry=http://${NEXUS_USER}:${NEXUS_PASS}@54.198.52.20:8081/repository/npm-proxy/|" .npmrc
-                            sed -i "s|^ENV NPM_CONFIG_REGISTRY=.*|ENV NPM_CONFIG_REGISTRY=http://${NEXUS_USER}:${NEXUS_PASS}@54.198.52.20:8081/repository/npm-proxy/|" Dockerfile
-                        '''
-                    }
-                }
-            }
-        }
+        // stage('Edit Nexus .npmrc and Dockerfile') {
+        //     steps {
+        //         script {
+        //             echo '========== Editing .npmrc for Nexus =========='
+        //             withCredentials([usernamePassword(credentialsId: "${NEXUS_CREDENTIALS}", usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
+        //                 sh '''
+        //                     set -e
+        //                     sed -i "s|^registry=.*|registry=http://${NEXUS_USER}:${NEXUS_PASS}@54.198.52.20:8081/repository/npm-proxy/|" .npmrc
+        //                     sed -i "s|^ENV NPM_CONFIG_REGISTRY=.*|ENV NPM_CONFIG_REGISTRY=http://${NEXUS_USER}:${NEXUS_PASS}@54.198.52.20:8081/repository/npm-proxy/|" Dockerfile
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Test') {
             steps {

@@ -11,9 +11,9 @@ COPY package-lock.json ./
 COPY tsconfig.json ./
 COPY .npmrc /root/.npmrc
 
-ENV NPM_CONFIG_USERCONFIG=/root/.npmrc
-ENV NPM_CONFIG_REGISTRY='Nexus registry URL'
-ENV NPM_CONFIG_STRICT_SSL=false
+# ENV NPM_CONFIG_USERCONFIG=/root/.npmrc
+# ENV NPM_CONFIG_REGISTRY='Nexus registry URL'
+# ENV NPM_CONFIG_STRICT_SSL=false
 
 # Install all dependencies (including dev dependencies)
 RUN npm install --ignore-scripts
@@ -34,9 +34,9 @@ COPY package.json ./
 COPY package-lock.json ./
 COPY .npmrc /root/.npmrc
 
-ENV NPM_CONFIG_USERCONFIG=/root/.npmrc
-ENV NPM_CONFIG_REGISTRY='Nexus registry URL'
-ENV NPM_CONFIG_STRICT_SSL=false
+# ENV NPM_CONFIG_USERCONFIG=/root/.npmrc
+# ENV NPM_CONFIG_REGISTRY='Nexus registry URL'
+# ENV NPM_CONFIG_STRICT_SSL=false
 
 # Copy dependencies and built app from builder stage
 RUN npm install --only=production --ignore-scripts
