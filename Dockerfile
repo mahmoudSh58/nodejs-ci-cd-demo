@@ -6,8 +6,14 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json ./
+COPY package-lock.json ./
 COPY tsconfig.json ./
+COPY .npmrc /root/.npmrc
+
+ENV NPM_CONFIG_USERCONFIG=/root/.npmrc
+ENV NPM_CONFIG_REGISTRY=http://34.228.226.222:8081/repository/npm-proxy/
+ENV NPM_CONFIG_STRICT_SSL=false
 
 # Install all dependencies (including dev dependencies)
 RUN npm ci
@@ -24,7 +30,13 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json ./
+COPY package-lock.json ./
+COPY .npmrc /root/.npmrc
+
+ENV NPM_CONFIG_USERCONFIG=/root/.npmrc
+ENV NPM_CONFIG_REGISTRY=http://34.228.226.222:8081/repository/npm-proxy/
+ENV NPM_CONFIG_STRICT_SSL=false
 
 # Install production dependencies only (skip prepare script)
 RUN npm ci --omit=dev --ignore-scripts
