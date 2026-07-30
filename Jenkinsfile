@@ -5,6 +5,7 @@ pipeline {
         DOCKER_REGISTRY = 'docker.io'
         DOCKER_IMAGE = 'nodejs-app'
         DOCKER_CREDENTIALS = 'docker-credentials'
+        NEXUS_CREDENTIALS = 'nexus-credentials'
         GIT_CREDENTIALS = 'github_cred'
         DOCKER_USER = 'mahmoud58'
         N8N_WEBHOOK_URL = 'https://theadmin123.app.n8n.cloud/webhook-test/f76365dd-7d10-4563-9764-be44915ca92c'
@@ -33,7 +34,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Test') {
             steps {
                 script {
