@@ -123,7 +123,7 @@ pipeline {
                     sh '''
                         curl -X POST \
                             -H "Content-Type: application/json" \
-                            -d '{"build_number":"'"${BUILD_NUMBER}"'"}' \
+                            -d '{"build_number":"'"${BUILD_NUMBER}"'" , "image":"'"${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}"'"}' \
                             "${N8N_WEBHOOK_URL}"
                     '''
                 }
