@@ -64,7 +64,7 @@ pipeline {
                 script {
                     echo '========== Building Docker Image =========='
                     sh '''
-                        docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .
+                        docker build --no-cache -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .
                     '''
                 }
             }
@@ -100,7 +100,7 @@ pipeline {
                     cd gitops_nodjsapp_sandbox
                     git checkout main
 
-                    ls namespaces/sandbox.yaml && rm namespaces/sandbox.yaml || echo "sandbox.yaml does not exist, proceeding to create it."
+                    rm -f namespaces/sandbox.yaml
                     cp namespaces/production.yaml namespaces/sandbox.yaml
                     sed -i "s|namespace:.*|namespace: sandbox|" namespaces/sandbox.yaml
                     sed -i "s|image:.*|image: \"${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}\"|" namespaces/sandbox.yaml
