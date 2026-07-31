@@ -105,7 +105,7 @@ pipeline {
                     sed -i "s|namespace:.*|namespace: sandbox|" namespaces/sandbox.yaml
                     sed -i "s|image:.*|image: \"${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}\"|" namespaces/sandbox.yaml
                     sed -i "s|replicaCount:.*|replicaCount: 1|" namespaces/sandbox.yaml
-                    
+
                     git config user.name "${GIT_USER}"
                     git config user.email "${GIT_USER}@users.noreply.github.com"
 
@@ -114,8 +114,16 @@ pipeline {
                     
                     git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@github.com/mahmoudSh58/gitops_nodjsapp_sandbox.git
                     git push origin main
-                    sleep 60
                     '''
+                }
+            }
+        }
+
+        stage('wait for 30 seconds') {
+            steps {
+                script {
+                    echo '========== Waiting for 30 seconds =========='
+                    sleep(time: 90, unit: "SECONDS")
                 }
             }
         }
