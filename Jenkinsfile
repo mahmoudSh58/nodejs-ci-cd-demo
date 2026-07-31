@@ -119,10 +119,10 @@ pipeline {
             }
         }
 
-        stage('wait for 30 seconds') {
+        stage('wait for 90 seconds') {
             steps {
                 script {
-                    echo '========== Waiting for 30 seconds =========='
+                    echo '========== Waiting for 90 seconds =========='
                     sleep(time: 90, unit: "SECONDS")
                 }
             }
