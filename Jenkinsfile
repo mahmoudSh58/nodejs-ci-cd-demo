@@ -100,8 +100,12 @@ pipeline {
                     cd gitops_nodjsapp_sandbox
                     git checkout main
 
-                    sed -i "s|image:.*|image: \"${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}\"|" nodejs-app-sandbox/values.yaml
-
+                    ls namespaces/sandbox.yaml && rm namespaces/sandbox.yaml || echo "sandbox.yaml does not exist, proceeding to create it."
+                    cp namespaces/production.yaml namespaces/sandbox.yaml
+                    sed -i "s|namespace:.*|namespace: sandbox|" namespaces/sandbox.yaml
+                    sed -i "s|image:.*|image: \"${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}\"|" namespaces/sandbox.yaml
+                    sed -i "s|replicaCount:.*|replicaCount: 1|" namespaces/sandbox.yaml
+                    
                     git config user.name "${GIT_USER}"
                     git config user.email "${GIT_USER}@users.noreply.github.com"
 
